@@ -19,12 +19,12 @@ public class DBService
 	public void firstLoad()
 	{
 		Person p1 = new Person("João", new Date(95, Calendar.AUGUST, 15));
-		Person p2 = new Person("Pedro", new Date(05, Calendar.JULY, 2));
+		Person p2 = new Person("José", new Date(05, Calendar.JULY, 2));
 		List<Person> people = personRepository.saveAll(Arrays.asList(p1, p2));
 
-		Address a1 = new Address(people.get(0), "Francisco Nicodemus", "89222020", 480L, "Joinville", true);
-		Address a2 = new Address(people.get(0), "Rua das Turmalinas", "89218070", 121, "Joinville", false);
-		Address a3 = new Address(people.get(1), "Rua das Turmalinas", "89218070", 121, "Joinville", true);
+		Address a1 = new Address(people.get(0), "Rua dos Alemães", "98202345", 304, "Joinville", true);
+		Address a2 = new Address(people.get(0), "Rua das Brasileiros", "89234505", 123, "Joinville", false);
+		Address a3 = new Address(people.get(1), "Rua das Turcos", "89205786", 567, "Joinville", true);
 		addressRepository.saveAll(Arrays.asList(a1, a2, a3));
 	}
 }
