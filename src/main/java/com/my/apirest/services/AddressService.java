@@ -23,4 +23,9 @@ public class AddressService
 	{
 		repository.save(address);
 	}
+
+	public void delete(Address address)
+	{
+		repository.delete(address);
+	}
 }

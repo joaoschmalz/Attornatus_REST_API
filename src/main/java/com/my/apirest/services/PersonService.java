@@ -51,7 +51,9 @@ public class PersonService
 
 	public void delete(Long id)
 	{
-		findById(id);
+		Person person = findById(id);
+		List<Address> addresses = person.getAddress();
+		addressRepository.deleteAll(addresses);
 		personRepository.deleteById(id);
 	}
 
