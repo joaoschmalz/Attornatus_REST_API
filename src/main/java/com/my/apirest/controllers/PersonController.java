@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 //TODO implementar try catch com retorno de erro customizado
-//garantir que toda a lógica está na camada de serviços
-//analisar boas práticas pra ver se não fica "estranho" o serviço de pessoa ter visibilidade do serviço de endereço
 @RestController
 @RequestMapping(value = "/person")
 public class PersonController
