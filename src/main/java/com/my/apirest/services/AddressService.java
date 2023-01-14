@@ -3,6 +3,7 @@ package com.my.apirest.services;
 import com.my.apirest.models.Address;
 import com.my.apirest.models.Person;
 import com.my.apirest.repository.AddressRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +20,13 @@ public class AddressService
 				address.getCity(), address.isMainAddress()));
 	}
 
-	public void updateMainAddress(Address address)
+	public void save(Address address)
 	{
 		repository.save(address);
 	}
 
-	public void delete(Address address)
+	public void deleteAll(List<Address> addresses)
 	{
-		repository.delete(address);
+		repository.deleteAll(addresses);
 	}
 }

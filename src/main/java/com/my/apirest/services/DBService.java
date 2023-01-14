@@ -18,8 +18,9 @@ public class DBService
 
 	public void firstLoad()
 	{
-		Person p1 = new Person("João", new Date(95, Calendar.AUGUST, 15));
-		Person p2 = new Person("José", new Date(05, Calendar.JULY, 2));
+		Person p1 = new Person("João", new GregorianCalendar(1995, Calendar.AUGUST, 15));
+		Person p2 = new Person("José", new GregorianCalendar(2007, Calendar.JUNE, 2));
+
 		List<Person> people = personRepository.saveAll(Arrays.asList(p1, p2));
 
 		Address a1 = new Address(people.get(0), "Rua dos Alemães", "98202345", 304, "Joinville", true);

@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Person implements Serializable
@@ -21,32 +18,26 @@ public class Person implements Serializable
 	private String name;
 
 	@NotNull(message = "BIRTHDATE field is required !")
-	private Date birthdate;
+	private GregorianCalendar birthdate;
 
 	@OneToMany(mappedBy = "person")
 	@JsonManagedReference
-	private List<Address> address = new ArrayList<Address>();
+	private final List<Address> address = new ArrayList<>();
 
 	public Person()
 	{
 		super();
 	}
 
-	public Person(String name, Date birthdate /*, List<Address> address*/)
+	public Person(String name, GregorianCalendar birthdate)
 	{
 		this.name = name;
 		this.birthdate = birthdate;
-//		this.address = address;
 	}
 
 	public long getId()
 	{
 		return id;
-	}
-
-	public void setId(long id)
-	{
-		this.id = id;
 	}
 
 	public String getName()
@@ -59,12 +50,12 @@ public class Person implements Serializable
 		this.name = name;
 	}
 
-	public Date getBirthdate()
+	public GregorianCalendar getBirthdate()
 	{
 		return birthdate;
 	}
 
-	public void setBirthdate(Date birthdate)
+	public void setBirthdate(GregorianCalendar birthdate)
 	{
 		this.birthdate = birthdate;
 	}
@@ -72,11 +63,6 @@ public class Person implements Serializable
 	public List<Address> getAddress()
 	{
 		return address;
-	}
-
-	public void setAddress(List<Address> address)
-	{
-		this.address = address;
 	}
 
 	@Override

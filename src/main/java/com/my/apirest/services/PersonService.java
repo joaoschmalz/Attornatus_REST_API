@@ -2,7 +2,6 @@ package com.my.apirest.services;
 
 import com.my.apirest.models.Address;
 import com.my.apirest.models.Person;
-import com.my.apirest.repository.AddressRepository;
 import com.my.apirest.repository.PersonRepository;
 import com.my.apirest.services.exceptions.ObjectNotFoundException;
 import java.util.List;
@@ -16,11 +15,22 @@ public class PersonService
 	private PersonRepository personRepository;
 
 	@Autowired
-	private AddressRepository addressRepository;
+	private AddressService addressService;
 
 	public Person create(Person person)
 	{
-		return personRepository.save(person);
+		List<Address> addresses = person.getAddress();
+
+		if (oneMainAddressOnly(addresses))
+		{
+			return null;
+		}
+		Person newPerson = personRepository.save(new Person(person.getName(), person.getBirthdate()));
+		for (Address address : addresses)
+		{
+			addressService.create(address, newPerson);
+		}
+		return newPerson;
 	}
 
 	public Person findById(long id)
@@ -41,6 +51,10 @@ public class PersonService
 
 	public Person update(long id, Person person)
 	{
+		if (oneMainAddressOnly(person.getAddress()) && !isValidPersonInfo(person))
+		{
+			return null;
+		}
 		Person newPerson = findById(id);
 
 		newPerson.setName(person.getName());
@@ -53,32 +67,40 @@ public class PersonService
 	{
 		Person person = findById(id);
 		List<Address> addresses = person.getAddress();
-		addressRepository.deleteAll(addresses);
+		addressService.deleteAll(addresses);
 		personRepository.deleteById(id);
 	}
 
-	public Address updateMainAddress(long id, long addressId)
+	public Address setNewMainAddress(long id, long addressId)
 	{
-		List<Address> addresses = findById(id).getAddress();
+		Person person = findById(id);
+		turnActiveMainAddressFalse(person);
 
-		updateActiveMainAddress(addresses);
-
-		return newMainAddress(addresses, addressId);
+		return createNewMainAddress(person.getAddress(), addressId);
 	}
 
-	public void updateActiveMainAddress(List<Address> addresses)
+	public void updateActiveMainAddress(long personId, Address address)
 	{
-		for (Address existingAddress : addresses)
+		Person personToEdit = this.findById(personId);
+
+		if (personToEdit != null && isValidAddressInfo(address))
+		{
+			turnActiveMainAddressFalse(personToEdit);
+		}
+	}
+
+	public void turnActiveMainAddressFalse(Person person){
+		for (Address existingAddress : person.getAddress())
 		{
 			if (existingAddress.isMainAddress())
 			{
 				existingAddress.setMainAddress(false);
-				addressRepository.save(existingAddress);
+				addressService.save(existingAddress);
 			}
 		}
 	}
 
-	public Address newMainAddress(List<Address> addresses, long addressId)
+	public Address createNewMainAddress(List<Address> addresses, long addressId)
 	{
 		Address newMainAddress = null;
 
@@ -87,11 +109,37 @@ public class PersonService
 			if (address.getId() == addressId)
 			{
 				address.setMainAddress(true);
-				addressRepository.save(address);
+				addressService.save(address);
 				newMainAddress = address;
 				break;
 			}
 		}
 		return newMainAddress;
+	}
+
+	public boolean oneMainAddressOnly(List<Address> addresses)
+	{
+		int count = 0;
+
+		for (Address address : addresses)
+		{
+			if (address.isMainAddress())
+			{
+				count++;
+			}
+		}
+		return count != 1;
+	}
+
+	public boolean isValidPersonInfo(Person person)
+	{
+		return person.getName() != null && !"".equals(person.getName()) && person.getBirthdate() != null;
+	}
+
+	public boolean isValidAddressInfo(Address address)
+	{
+		return (address.getCity() != null && !"".equals(address.getCity()) && address.getStreet() != null
+			&& !"".equals(address.getStreet()) && address.getZipCode() != null && !"".equals(
+			address.getZipCode()));
 	}
 }
