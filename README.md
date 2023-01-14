@@ -23,7 +23,7 @@
      * Cidade
 -----
 
-### Tabela ENDPOINTS
+### ENDPOINTS
 
 | AÇÃO                                    | METODO | ROTA                                  |
 |-----------------------------------------|--------|---------------------------------------|
@@ -62,7 +62,7 @@ JSON entrada:
 RETORNA a URI de consulta da pessoa criada {baseURL}/person/3
 
 -----
-### EDITAR UMA PESSOA
+### Editar uma pessoa
 **Obs.** Visto que existe um método específico para o cadastro/alteração de endereço, este endpoint não considera alteração de endereço.
 JSON modelo alteração de pessoa
 
@@ -95,7 +95,7 @@ Retorna o objeto completo da pessoa alterada
 ````
 
 -----
-### CADASTRAR NOVO ENDEREÇO DE UMA PESSOA
+### Cadastar novo endereço de uma pessoa
 
 Modelo novo endereço:
 
